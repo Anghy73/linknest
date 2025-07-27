@@ -2,12 +2,15 @@
 
 import { getDataUrl } from "@/lib/actions";
 import PreviewLink from "@/ui/links/PreviewLink";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { LinkData } from "../../../types/link-data-type";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import useLinksStore from "@/lib/store";
+import { link } from "fs";
 
 export default function Page() {
+  const { links, addLink } = useLinksStore()
   const [currentUrl, setCurrentUrl] = useState<LinkData | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,9 +21,22 @@ export default function Page() {
     console.log(url);
     console.log("hi");
     const data = await getDataUrl(url);
-    if (data) setCurrentUrl(data.dataUrl);
+    if (data) {
+      console.log('agregando');
+      
+      setCurrentUrl(data.dataUrl);
+      addLink(data.dataUrl)
+    }
     console.log(data?.dataUrl);
   };
+
+  // useEffect(() => {
+  //   console.log('hi links');
+    
+  // }, [links])
+
+  console.log(links);
+  
 
   return (
     <div className="flex flex-col gap-10 justify-center items-center min-h-screen py-20">
@@ -36,7 +52,19 @@ export default function Page() {
 
       <div className="w-full">
         <div className="text-center">
-          {currentUrl && <PreviewLink {...currentUrl} />}
+          {
+            links.length >= 1 ? <>
+            {
+              links.map((link: LinkData) => (
+                <div key={link.data.url}>
+                  <PreviewLink {...link}></PreviewLink>
+                </div>
+              ))
+            }
+            </> : <p>No se han encontrado links</p>
+          }
+
+          {/* {currentUrl && <PreviewLink {...currentUrl} />} */}
         </div>
       </div>
     </div>
