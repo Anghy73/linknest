@@ -13,15 +13,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
@@ -47,9 +38,6 @@ export function SelectTags() {
   const [tags, setTags] = useState<Array<string>>([]);
 
   const addTag = (tag: string) => {
-    console.log("dlaksjdlkasj");
-
-    // console.log(e);
     const newTag = tag;
     const newState = [...tags, newTag];
     setTags(newState);
@@ -69,8 +57,9 @@ export function SelectTags() {
               {tags.length >= 1 ? (
                 <div className="flex gap-2">
                   {tags.map((tag) => (
-                    <Badge key={tag} variant={"outline"}>{tag}</Badge>
-                    // <div key={tag} className="border-2 p-2 py-0 rounded-md">{tag}</div>
+                    <Badge key={tag} variant={"outline"}>
+                      {tag}
+                    </Badge>
                   ))}
                 </div>
               ) : (
@@ -85,7 +74,6 @@ export function SelectTags() {
             <CommandInput placeholder="Search Tags..." className="h-9" />
             <CommandList>
               <CommandEmpty>No tags found.</CommandEmpty>
-
               <CommandGroup>
                 {tagsOptions.map((tag) => (
                   <CommandItem
