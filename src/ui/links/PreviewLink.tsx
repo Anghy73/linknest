@@ -1,18 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Data, LinkData } from "../../../types/link-data-type";
 
-// interface urlDataI {
-//   author: null
-//   date: string,
-//   description: string,
-//   image: {url: 'https://react.dev/images/og-home.png', type: 'png', size: 292630, height: 567, width: 1080},
-//   lang: "en",
-//   logo: {url: 'https://react.dev/apple-touch-icon.png', type: 'png', size: 5670, height: 180, width: 180},
-//   publisher: "react.dev",
-//   title: "React",
-//   url: "https://react.dev/",
-// }
-
 function PreviewLink({
   urlData,
   urlDataLoader,
@@ -20,10 +8,6 @@ function PreviewLink({
   urlData: Data | null;
   urlDataLoader: boolean;
 }) {
-  console.log(urlData);
-
-  console.log("sdkhaskjdh");
-
   // if (!urlData) return;
 
   return (

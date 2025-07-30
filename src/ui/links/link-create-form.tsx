@@ -19,48 +19,49 @@ import React, { Suspense, useState } from "react";
 import { Data, LinkData } from "../../../types/link-data-type";
 import { Skeleton } from "@/components/ui/skeleton";
 import useLinksStore from "@/lib/store";
+import { createLink, getDataUrl } from "@/lib/actions";
 
-const data = {
-  author: null,
-  date: "2025-07-28T20:32:37.000Z",
-  description:
-    "React is the library for web and native user interfaces. Build user interfaces out of individual pieces called components written in JavaScript. React is designed to let you seamlessly combine components written by independent people, teams, and organizations.",
-  image: {
-    url: "https://react.dev/images/og-home.png",
-    type: "png",
-    size: 292630,
-    height: 567,
-    width: 1080,
-  },
-  lang: "en",
-  logo: {
-    url: "https://react.dev/apple-touch-icon.png",
-    type: "png",
-    size: 5670,
-    height: 180,
-    width: 180,
-  },
-  publisher: "react.dev",
-  title: "React",
-  url: "https://react.dev/",
-};
+// const data = {
+//   author: null,
+//   date: "2025-07-28T20:32:37.000Z",
+//   description:
+//     "React is the library for web and native user interfaces. Build user interfaces out of individual pieces called components written in JavaScript. React is designed to let you seamlessly combine components written by independent people, teams, and organizations.",
+//   image: {
+//     url: "https://react.dev/images/og-home.png",
+//     type: "png",
+//     size: 292630,
+//     height: 567,
+//     width: 1080,
+//   },
+//   lang: "en",
+//   logo: {
+//     url: "https://react.dev/apple-touch-icon.png",
+//     type: "png",
+//     size: 5670,
+//     height: 180,
+//     width: 180,
+//   },
+//   publisher: "react.dev",
+//   title: "React",
+//   url: "https://react.dev/",
+// };
 
 function LinkCreateForm() {
   const [urlData, setUrlData] = useState<Data | null>(null);
   const [urlDataLoader, setUrlDataLoader] = useState(false);
   const [urlError, setUrlError] = useState("");
-  const [isUrl, setIsUrl] = useState(false);
+  const [isUrl, setIsUrl] = useState(true);
 
-  const [shortUrl, setShortUrl] = useState('');
+  const [shortUrl, setShortUrl] = useState("");
+  const [tags, setTags] = useState<Array<string>>([]);
 
   const { links } = useLinksStore();
   const urls = links.map((link) => link.data.url);
-  console.log(urls);
 
   const setLink = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrlData(null);
     setUrlError("");
-    setShortUrl("")
+    setShortUrl("");
     const regex = new RegExp("^https://[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(/.*)?$");
     const url = e.currentTarget.value;
     if (!regex.test(url)) return;
@@ -68,44 +69,63 @@ function LinkCreateForm() {
       setUrlError("link already exists");
       return;
     }
-    console.log("correcto");
     setUrlDataLoader(true);
     try {
       const res = await fetch(`https://api.microlink.io/?url=${url}`);
       const json = await res.json();
-      console.log(json.statusCode);
       if (json.statusCode == null) {
         setUrlError("link don't exists");
         return;
       }
-      const genShortUrl = `${Math.random().toString(36).substr(2, 6)}`
-      setShortUrl(genShortUrl)
+      setIsUrl(false);
+      const genShortUrl = `${Math.random().toString(36).substr(2, 6)}`;
+      setShortUrl(genShortUrl);
       setUrlData(json.data);
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("finally");
-
       setUrlDataLoader(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget)
+    // aqui tomaria todos los datos y crearia los links como en la función action
+    const rawData = {
+      
+    }
+
+    console.log(rawData);
+    
+
+    // await createLink(rawData)
+  };
+
+  const addTag = (tag: string) => {
+    const newTag = tag;
+    const newState = [...tags, newTag];
+    setTags(newState);
   };
 
   return (
     <>
       <div>link-create-form</div>
       <Dialog>
-        <form>
-          <DialogTrigger asChild>
-            <Button onClick={() => setUrlData(null)} variant="outline">+ Add Link</Button>
-          </DialogTrigger>
-          <DialogContent className="md:min-w-5xl">
-            <DialogHeader className="mb-4">
-              <DialogTitle>Add link</DialogTitle>
-              <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
-              </DialogDescription>
-            </DialogHeader>
+        <DialogTrigger asChild>
+          <Button onClick={() => setUrlData(null)} variant="outline">
+            + Add Link
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="md:min-w-5xl">
+          <DialogHeader className="mb-4">
+            <DialogTitle>Add link</DialogTitle>
+            <DialogDescription>
+              Add a new link to your collection. You can assign tags and leave
+              comments.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <div className="flex gap-10">
               <div className="grid gap-4 flex-2">
                 <div className="grid gap-3">
@@ -141,7 +161,7 @@ function LinkCreateForm() {
                     <Input
                       id="shortUrl"
                       name="shortUrl"
-                      defaultValue={shortUrl ? shortUrl : ''}
+                      defaultValue={shortUrl ? shortUrl : ""}
                       disabled
                     />
                   </div>
@@ -149,7 +169,11 @@ function LinkCreateForm() {
                 <div className="grid gap-3">
                   <Label htmlFor="tags">Tags</Label>
                   <div className="flex gap-2">
-                    <SelectTags></SelectTags>
+                    <SelectTags
+                      tags={tags}
+                      addTag={addTag}
+                      setTags={setTags}
+                    ></SelectTags>
                     <AddTag></AddTag>
                   </div>
                 </div>
@@ -177,12 +201,16 @@ function LinkCreateForm() {
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit" disabled={isUrl}>
+              <Button
+                type="submit"
+                onClick={() => console.log("click save link")}
+                disabled={isUrl}
+              >
                 Save link
               </Button>
             </DialogFooter>
-          </DialogContent>
-        </form>
+          </form>
+        </DialogContent>
       </Dialog>
     </>
   );

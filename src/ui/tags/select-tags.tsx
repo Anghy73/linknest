@@ -32,16 +32,8 @@ const tagsOptions = [
   },
 ];
 
-export function SelectTags() {
+export function SelectTags({ tags, addTag, setTags }: { tags: Array<string>, addTag: (tag: string) => void, setTags:  React.Dispatch<React.SetStateAction<string[]>> }) {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const [tags, setTags] = useState<Array<string>>([]);
-
-  const addTag = (tag: string) => {
-    const newTag = tag;
-    const newState = [...tags, newTag];
-    setTags(newState);
-  };
 
   return (
     <div className="w-full">
@@ -80,7 +72,7 @@ export function SelectTags() {
                     key={tag.value}
                     value={tag.value}
                     onSelect={(currentValue) => {
-                      console.log(currentValue);
+                      // console.log(currentValue);
                       if (tags.includes(currentValue)) {
                         const filterTags = tags.filter(
                           (tag) => tag != currentValue

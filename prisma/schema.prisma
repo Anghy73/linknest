@@ -14,35 +14,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id Int @id @default(autoincrement())
-  username String
-  email String @unique
-  password String
-  role Role @default(USER)
-  links Link[]
-  createdAt DateTime @default(now())
-}
+// model User {
+//   id Int @id @default(autoincrement())
+//   username String
+//   email String @unique
+//   password String
+//   role Role @default(USER)
+//   links Link[]
+//   tags Tags[]
+//   createdAt DateTime @default(now())
+// }
 
 model Link {
   id Int @id @default(autoincrement())
-  user User @relation(fields: [userId], references: [id])
-  userId Int
+  // user User @relation(fields: [userId], references: [id])
+  // userId Int
   title String
   description String
-  imgIcon String
-  imgOG String
+  logo String
+  img String
   url String
   shortUrl String
+  comment String
+  linkTags LinkTag[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@index([title])
 }
 
-model ShortLink {
+model Tag {
   id Int @id @default(autoincrement())
-  url String @unique
-  shortUrl String @unique
-  createdAt DateTime @default(now())
+  value String @unique
+  label String
+  links LinkTag[]
+}
+  // @@index([userId, value])
+model LinkTag {
+  id Int @id @default(autoincrement())
+  link Link @relation(fields: [linkId], references: [id])
+  linkId Int
+  tag Tag @relation(fields: [tagId], references: [id])
+  tagId Int
+  // user User @relation(fields: [userId], references: [id])
+  // userId Int
 }
 
 enum Role {
@@ -50,5 +64,25 @@ enum Role {
   ADMIN
 }
 
+// model Tags {
+//   id Int @id @default(autoincrement())
+//   // user User @relation(fields: [userId], references: [id])
+//   // userId Int
+//   link Link @relation(fields: [linkId], references: [id])
+//   linkId Int
+//   value String
+//   label String
+// }
+
+
+
 // Tabla de config for user / para guardar config de apariencias.
 // Tabla de tags
+
+
+// model ShortLink {
+//   id Int @id @default(autoincrement())
+//   url String @unique
+//   shortUrl String @unique
+//   createdAt DateTime @default(now())
+// }
