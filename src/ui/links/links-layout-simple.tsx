@@ -15,41 +15,60 @@ import { MdDelete } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
 import { TbCopy } from "react-icons/tb";
 import { Button, buttonVariants } from "@/components/ui/button";
+import prisma from "@/lib/prisma";
 
-function LayoutSimple() {
-  const { links } = useLinksStore();
+async function LayoutSimple() {
+  const links = await prisma.link.findMany({
+    include: {
+      linkTags: {
+        include: {
+          tag: true
+        }
+      }
+    }
+  });
+  // const linkTags = await prisma.tag.findMany({ where: { id: 1 } })
+  // console.log(linkTags);
+  
+  // const { links } = useLinksStore();
   console.log(links);
-
   return (
     <div className="flex flex-col items-center gap-6 px-20">
       <h2>links-layout-simple</h2>
-      {links.map((link) => (
+      {links.length >= 1 ? links.map((link) => (
         <div
           className="w-full flex justify-between max-w-6xl py-2 px-3 border-2 rounded-2xl border-black/30"
-          key={link.data.url}
+          key={link.url}
         >
           <figure className="w-15 h-15 rounded-full overflow-hidden object-contain p-1 mr-2">
             <img
               className="w-full h-full"
-              src={link.data.logo.url}
-              alt={`Icon of ${link.data.title}`}
+              src={link.logo}
+              alt={`Icon of ${link.title}`}
             />
           </figure>
           <div className="flex flex-col items-start flex-1">
             <div className="flex gap-2 justify-center items-center">
               <a
                 className="font-medium underline text-lg"
-                href={link.data.url}
+                href={link.url}
                 target="_blank"
               >
-                {link.data.title}
+                {link.title}
               </a>
               <Button variant={"ghost"} className="cursor-pointer">
                 <TbCopy></TbCopy>
               </Button>
             </div>
-            <span className="text-slate-500">{link.data.url}</span>
+            <span className="text-slate-500">{link.url}</span>
           </div>
+          {/* <div>
+            {
+              link?.linkTags.length >= 1 ? link.linkTags.map((tag) => (
+                <div key={tag.id}>{tag.tag.label}</div>
+              )) : null 
+            }
+          </div> */}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <span
@@ -96,7 +115,7 @@ function LayoutSimple() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      ))}
+      )) : (<p>No se han encontrado links</p>)}
     </div>
   );
 }

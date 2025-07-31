@@ -1,15 +1,18 @@
-"use client";
-
 import { getDataUrl } from "@/lib/actions";
 import React, { useState } from "react";
 import { LinkData } from "../../../types/link-data-type";
 import useLinksStore from "@/lib/store";
 import LayoutSimple from "@/ui/links/links-layout-simple";
 import LinkCreateForm from "@/ui/links/link-create-form";
+import prisma from "@/lib/prisma";
 
-export default function Page() {
-  const { links, addLink } = useLinksStore();
-  const [currentUrl, setCurrentUrl] = useState<LinkData | null>(null);
+export default async function Page() {
+  // const links = await prisma.link.findMany();
+  // console.log(links);
+  
+  // const { links } = useLinksStore();
+
+  // const [currentUrl, setCurrentUrl] = useState<LinkData | null>(null);
 
   // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
@@ -28,11 +31,7 @@ export default function Page() {
       <LinkCreateForm></LinkCreateForm>
       <div className="w-full">
         <div className="text-center">
-          {links.length >= 1 ? (
-            <LayoutSimple></LayoutSimple>
-          ) : (
-            <p>No se han encontrado links</p>
-          )}
+          <LayoutSimple></LayoutSimple>
         </div>
       </div>
     </div>
