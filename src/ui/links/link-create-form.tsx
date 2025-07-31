@@ -95,7 +95,14 @@ function LinkCreateForm() {
     const formData = new FormData(e.currentTarget)
     // aqui tomaria todos los datos y crearia los links como en la función action
     const rawData = {
-      
+      title: '',
+      description: '',
+      logo: '',
+      img: '',
+      url: '',
+      shortUrl: '',
+      comment: '',
+      linkTags: ''
     }
 
     console.log(rawData);
@@ -176,7 +183,6 @@ function LinkCreateForm() {
                       addTag={addTag}
                       setTags={setTags}
                     ></SelectTags>
-                    <AddTag></AddTag>
                   </div>
                 </div>
                 <div className="grid gap-3">
@@ -201,7 +207,7 @@ function LinkCreateForm() {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline" onClick={() => setTags([])}>Cancel</Button>
               </DialogClose>
               <Button
                 type="submit"
