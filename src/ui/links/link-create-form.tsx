@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Dialog,
@@ -21,7 +21,8 @@ import React, { Suspense, useState } from "react";
 import { Data, LinkData } from "../../../types/link-data-type";
 import { Skeleton } from "@/components/ui/skeleton";
 import useLinksStore from "@/lib/store";
-import { createLink, getDataUrl } from "@/lib/actions";
+import { createLink, getAllLinks, getDataUrl } from "@/lib/actions";
+import prisma from "@/lib/prisma";
 
 // const data = {
 //   author: null,
@@ -48,6 +49,12 @@ import { createLink, getDataUrl } from "@/lib/actions";
 //   url: "https://react.dev/",
 // };
 
+type TagI = {
+  id: number;
+  value: string;
+  label: string;
+};
+
 function LinkCreateForm() {
   const [urlData, setUrlData] = useState<Data | null>(null);
   const [urlDataLoader, setUrlDataLoader] = useState(false);
@@ -55,10 +62,7 @@ function LinkCreateForm() {
   const [isUrl, setIsUrl] = useState(true);
 
   const [shortUrl, setShortUrl] = useState("");
-  const [tags, setTags] = useState<Array<string>>([]);
-
-  const { links } = useLinksStore();
-  const urls = links.map((link) => link.data.url);
+  const [tags, setTags] = useState<TagI[]>([]);
 
   const setLink = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrlData(null);
@@ -66,7 +70,15 @@ function LinkCreateForm() {
     setShortUrl("");
     const regex = new RegExp("^https://[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(/.*)?$");
     const url = e.currentTarget.value;
-    if (!regex.test(url)) return;
+    const links = await getAllLinks();
+    const urls = links.map((link) => link.url);
+    if (url.trim() == '') return
+    if (!(regex.test(url))) {
+      console.log(url);
+      
+      setUrlError("url invalid");
+      return;
+    }
     if (urls.includes(url)) {
       setUrlError("link already exists");
       return;
@@ -92,35 +104,45 @@ function LinkCreateForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget)
+    const formData = new FormData(e.currentTarget);
+    console.log(tags);
+    const linkTagsIds = tags.map((tag) => tag.id);
+
     // aqui tomaria todos los datos y crearia los links como en la función action
-    const rawData = {
-      title: '',
-      description: '',
-      logo: '',
-      img: '',
-      url: '',
-      shortUrl: '',
-      comment: '',
-      linkTags: ''
+    const rawDataWithTags = {
+      title: urlData?.title,
+      description: urlData?.description,
+      logo: urlData?.logo.url,
+      img: urlData?.image.url,
+      url: urlData?.url,
+      shortUrl: shortUrl,
+      comment: formData.get("comment"),
+      linkTags: linkTagsIds,
+    };
+
+    try {
+      await createLink(rawDataWithTags);
+    } catch (error) {
+      console.log(error);
     }
-
-    console.log(rawData);
-    
-
-    // await createLink(rawData)
   };
 
-  const addTag = (tag: string) => {
+  const addTag = (tag: TagI) => {
     const newTag = tag;
     const newState = [...tags, newTag];
     setTags(newState);
   };
 
+  const handleOpen = () => {
+    setTags([]);
+    setShortUrl("");
+    setUrlError("")
+  };
+
   return (
     <>
       <div>link-create-form</div>
-      <Dialog>
+      <Dialog onOpenChange={handleOpen}>
         <DialogTrigger asChild>
           <Button onClick={() => setUrlData(null)} variant="outline">
             + Add Link
@@ -166,7 +188,9 @@ function LinkCreateForm() {
                 <div className="grid gap-3">
                   <Label htmlFor="shortUrl">Short Link</Label>
                   <div className="flex">
-                    <Button variant={"outline"}>linknest.dev/</Button>
+                    <Button variant={"outline"} type="button">
+                      linknest.dev/
+                    </Button>
                     <Input
                       id="shortUrl"
                       name="shortUrl"
@@ -207,7 +231,7 @@ function LinkCreateForm() {
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline" onClick={() => setTags([])}>Cancel</Button>
+                <Button variant="outline">Cancel</Button>
               </DialogClose>
               <Button
                 type="submit"

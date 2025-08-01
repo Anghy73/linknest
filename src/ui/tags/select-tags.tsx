@@ -46,9 +46,9 @@ export function SelectTags({
   addTag,
   setTags,
 }: {
-  tags: Array<string>;
-  addTag: (tag: string) => void;
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  tags: Array<TagI>;
+  addTag: (tag: TagI) => void;
+  setTags: React.Dispatch<React.SetStateAction<TagI[]>>;
 }) {
   const [open, setOpen] = useState(false);
   const [tagsOptions, setTagsOptions] = useState<TagI[]>();
@@ -80,8 +80,8 @@ export function SelectTags({
                 {tags.length >= 1 ? (
                   <div className="flex gap-2">
                     {tags.map((tag) => (
-                      <Badge key={tag} variant={"outline"}>
-                        {tag}
+                      <Badge key={tag.id} variant={"outline"}>
+                        {tag.label}
                       </Badge>
                     ))}
                   </div>
@@ -103,17 +103,17 @@ export function SelectTags({
                       key={tag.value}
                       value={tag.value}
                       onSelect={(currentValue) => {
-                        // console.log(currentValue);
-                        if (tags.includes(currentValue)) {
+                        if (tags.includes(tag)) {
                           const filterTags = tags.filter(
-                            (tag) => tag != currentValue
+                            (tag) => tag.value != currentValue
                           );
+
                           setTags(filterTags);
                           setOpen(false);
                           return;
                         }
-                        addTag(currentValue);
-                        // setValue(currentValue === value ? "" : currentValue);
+
+                        addTag(tag);
                         setOpen(false);
                       }}
                     >
@@ -121,7 +121,7 @@ export function SelectTags({
                       <Check
                         className={cn(
                           "ml-auto",
-                          tags.includes(tag.value) ? "opacity-100" : "opacity-0"
+                          tags.includes(tag) ? "opacity-100" : "opacity-0"
                         )}
                       />
                     </CommandItem>

@@ -28,16 +28,53 @@ export const getDataUrl = async (formdata: FormData) => {
   }
 }
 
-export const createLink = async (formData: FormData) => {
-  console.log('hi');
+interface CreateLinkWithTags {
+  title: string | undefined
+  description: string | undefined
+  logo: string | undefined
+  img: string | undefined
+  url: string | undefined
+  shortUrl: string
+  comment: FormDataEntryValue | null
+  linkTags: Array<number>
+}
 
-  const rawData = {
-    url: formData.get('url'),
-    shortUrl: formData.get('shortUrl'),
-    commentLink: formData.get('commentLink')
-  }
+export const createLink = async (rawDataWithLink: CreateLinkWithTags) => {
+  console.log('hi fron server');
+  console.log(rawDataWithLink);
+  console.log(rawDataWithLink.linkTags);
 
-  console.log(rawData);
+  const link = await prisma.link.create({
+    data: {
+      title: rawDataWithLink.title ?? '',
+      description: rawDataWithLink.description ?? '',
+      comment: rawDataWithLink.comment?.toString() ?? '',
+      url: rawDataWithLink.url ?? '',
+      img: rawDataWithLink.img ?? '',
+      shortUrl: rawDataWithLink.shortUrl ?? '',
+      logo: rawDataWithLink.logo ?? '',
+    }
+  })
+
+  const tagIds = rawDataWithLink.linkTags.map(id => id) ; // tus IDs de tag (asegúrate que existan)
+
+  const linkTagRelations = tagIds.map((tagId) => ({
+    linkId: link.id,
+    tagId,
+  }));
+
+  await prisma.linkTag.createMany({
+    data: linkTagRelations,
+  });
+
+
+
+  console.log(link.id);
+  // linkTags: {
+  //       connect: rawDataWithLink.linkTags.map(id => ({ id }))
+  //     }
+
+
   revalidatePath('/user')
   redirect('/user')
 }
@@ -69,4 +106,8 @@ export const createTag = async (formData: FormData) => {
 
 export const getTags = async () => {
   return prisma.tag.findMany()
+}
+
+export const getAllLinks = async () => {
+  return prisma.link.findMany()
 }
