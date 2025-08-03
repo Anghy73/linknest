@@ -71,13 +71,11 @@ model LinkTag {
 model ShortLink {
   id        Int      @id @default(autoincrement())
   url       String
-  shortUrl  String
+  shortUrl  String @unique
   createdAt DateTime @default(now())
   user      User?    @relation(fields: [userId], references: [id])
   userId    Int?
   guestId   String
-
-  @@unique([shortUrl, guestId])
 }
 
 enum Role {

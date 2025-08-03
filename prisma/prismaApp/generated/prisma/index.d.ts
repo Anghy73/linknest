@@ -7712,17 +7712,16 @@ export namespace Prisma {
 
   export type ShortLinkWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    shortUrl_guestId?: ShortLinkShortUrlGuestIdCompoundUniqueInput
+    shortUrl?: string
     AND?: ShortLinkWhereInput | ShortLinkWhereInput[]
     OR?: ShortLinkWhereInput[]
     NOT?: ShortLinkWhereInput | ShortLinkWhereInput[]
     url?: StringFilter<"ShortLink"> | string
-    shortUrl?: StringFilter<"ShortLink"> | string
     createdAt?: DateTimeFilter<"ShortLink"> | Date | string
     userId?: IntNullableFilter<"ShortLink"> | number | null
     guestId?: StringFilter<"ShortLink"> | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-  }, "id" | "shortUrl_guestId">
+  }, "id" | "shortUrl">
 
   export type ShortLinkOrderByWithAggregationInput = {
     id?: SortOrder
@@ -8445,11 +8444,6 @@ export namespace Prisma {
     linkId?: SortOrder
     tagId?: SortOrder
     userId?: SortOrder
-  }
-
-  export type ShortLinkShortUrlGuestIdCompoundUniqueInput = {
-    shortUrl: string
-    guestId: string
   }
 
   export type ShortLinkCountOrderByAggregateInput = {
