@@ -1,5 +1,13 @@
 # linknest
 
-La página principal es para crear más adelante la landing page, para presentar el producto.
-
-urlBase/user: aqui está la app principal.
+### Tareas
+- [ ] crear landing page.
+- [x] poder agregar links.
+- [x] agregar tags a los link.
+- [ ] crear los 3 layouts de los links.
+- [ ] filtro de titles de los links.
+- [ ] filtro por categoria.
+- [ ] crear el short link.
+- [ ] editar links
+- [ ] compartir links con el shortLink.
+- [ ] eliminar links.

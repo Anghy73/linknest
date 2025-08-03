@@ -17,7 +17,7 @@ import { SelectTags } from "../tags/select-tags";
 import AddTag from "../tags/add-tag";
 import { Textarea } from "@/components/ui/textarea";
 import PreviewLink from "./PreviewLink";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Data, LinkData } from "../../../types/link-data-type";
 import { Skeleton } from "@/components/ui/skeleton";
 import useLinksStore from "@/lib/store";
@@ -61,8 +61,21 @@ function LinkCreateForm() {
   const [urlError, setUrlError] = useState("");
   const [isUrl, setIsUrl] = useState(true);
 
+  const [guestId, setGuestId] = useState<string | null>(null);
+
   const [shortUrl, setShortUrl] = useState("");
   const [tags, setTags] = useState<TagI[]>([]);
+
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    let storedGuestId = localStorage.getItem("guestId");
+    if (!storedGuestId) {
+      storedGuestId = crypto.randomUUID();
+      localStorage.setItem("guestId", storedGuestId);
+    }
+    setGuestId(storedGuestId);
+  }, []);
 
   const setLink = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrlData(null);
@@ -70,12 +83,11 @@ function LinkCreateForm() {
     setShortUrl("");
     const regex = new RegExp("^https://[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(/.*)?$");
     const url = e.currentTarget.value;
-    const links = await getAllLinks();
+    if (!guestId) return
+    const links = await getAllLinks(guestId);
     const urls = links.map((link) => link.url);
-    if (url.trim() == '') return
-    if (!(regex.test(url))) {
-      console.log(url);
-      
+    if (url.trim() == "") return;
+    if (!regex.test(url)) {
       setUrlError("url invalid");
       return;
     }
@@ -105,7 +117,8 @@ function LinkCreateForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    console.log(tags);
+    console.log(localStorage.getItem("guestId"));
+
     const linkTagsIds = tags.map((tag) => tag.id);
 
     // aqui tomaria todos los datos y crearia los links como en la función action
@@ -118,10 +131,14 @@ function LinkCreateForm() {
       shortUrl: shortUrl,
       comment: formData.get("comment"),
       linkTags: linkTagsIds,
+      guestId: localStorage.getItem("guestId") ?? null,
     };
 
     try {
-      await createLink(rawDataWithTags);
+      const res = await createLink(rawDataWithTags);
+      if (res.id) {
+        setOpen(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -134,18 +151,19 @@ function LinkCreateForm() {
   };
 
   const handleOpen = () => {
+    setOpen(!open);
     setTags([]);
     setShortUrl("");
-    setUrlError("")
+    setUrlError("");
+    setUrlData(null);
   };
 
   return (
     <>
-      <div>link-create-form</div>
-      <Dialog onOpenChange={handleOpen}>
+      <Dialog onOpenChange={handleOpen} open={open}>
         <DialogTrigger asChild>
-          <Button onClick={() => setUrlData(null)} variant="outline">
-            + Add Link
+          <Button onClick={() => setOpen(true)} disabled={!guestId} variant="default">
+            Add Link
           </Button>
         </DialogTrigger>
         <DialogContent className="md:min-w-5xl">

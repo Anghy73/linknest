@@ -1,15 +1,10 @@
-import { getDataUrl } from "@/lib/actions";
-import React, { useState } from "react";
-import { LinkData } from "../../../types/link-data-type";
-import useLinksStore from "@/lib/store";
+import React from "react";
 import LayoutSimple from "@/ui/links/links-layout-simple";
-import LinkCreateForm from "@/ui/links/link-create-form";
-import prisma from "@/lib/prisma";
 
 export default async function Page() {
   // const links = await prisma.link.findMany();
   // console.log(links);
-  
+
   // const { links } = useLinksStore();
 
   // const [currentUrl, setCurrentUrl] = useState<LinkData | null>(null);
@@ -28,7 +23,6 @@ export default async function Page() {
   return (
     <div className="flex flex-col gap-10 justify-center items-center min-h-screen py-20">
       <h1>Link Nest</h1>
-      <LinkCreateForm></LinkCreateForm>
       <div className="w-full">
         <div className="text-center">
           <LayoutSimple></LayoutSimple>

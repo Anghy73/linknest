@@ -14,21 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id Int @id @default(autoincrement())
-//   username String
-//   email String @unique
-//   password String
-//   role Role @default(USER)
-//   links Link[]
-//   tags Tags[]
-//   createdAt DateTime @default(now())
-// }
+model User {
+  id         Int         @id @default(autoincrement())
+  username   String
+  email      String      @unique
+  password   String
+  role       Role        @default(USER)
+  links      Link[]
+  tags       Tag[]
+  linkTags   LinkTag[]
+  shortLinks ShortLink[]
+  createdAt  DateTime    @default(now())
+}
 
 model Link {
   id          Int       @id @default(autoincrement())
-  // user User @relation(fields: [userId], references: [id])
-  // userId Int
   title       String
   description String
   logo        String
@@ -36,52 +36,51 @@ model Link {
   url         String
   shortUrl    String
   comment     String
-  linkTags    LinkTag[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      Int?
+  guestId     String
+  linkTags    LinkTag[]
 
   @@index([title])
 }
 
 model Tag {
-  id    Int       @id @default(autoincrement())
-  value String    @unique
-  label String
-  links LinkTag[]
+  id      Int       @id @default(autoincrement())
+  value   String    @unique
+  label   String
+  user    User?     @relation(fields: [userId], references: [id])
+  userId  Int?
+  guestId String
+  links   LinkTag[]
 }
 
 // @@index([userId, value])
 model LinkTag {
-  id     Int  @id @default(autoincrement())
-  link   Link @relation(fields: [linkId], references: [id])
-  linkId Int
-  tag    Tag  @relation(fields: [tagId], references: [id])
-  tagId  Int
-  // user User @relation(fields: [userId], references: [id])
-  // userId Int
+  id      Int    @id @default(autoincrement())
+  link    Link   @relation(fields: [linkId], references: [id])
+  linkId  Int
+  tag     Tag    @relation(fields: [tagId], references: [id])
+  tagId   Int
+  user    User?  @relation(fields: [userId], references: [id])
+  userId  Int?
+  guestId String
+}
+
+model ShortLink {
+  id        Int      @id @default(autoincrement())
+  url       String
+  shortUrl  String
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+  guestId   String
+
+  @@unique([shortUrl, guestId])
 }
 
 enum Role {
   USER
   ADMIN
 }
-
-// model Tags {
-//   id Int @id @default(autoincrement())
-//   // user User @relation(fields: [userId], references: [id])
-//   // userId Int
-//   link Link @relation(fields: [linkId], references: [id])
-//   linkId Int
-//   value String
-//   label String
-// }
-
-// Tabla de config for user / para guardar config de apariencias.
-// Tabla de tags
-
-// model ShortLink {
-//   id Int @id @default(autoincrement())
-//   url String @unique
-//   shortUrl String @unique
-//   createdAt DateTime @default(now())
-// }

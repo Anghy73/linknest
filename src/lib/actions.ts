@@ -37,13 +37,10 @@ interface CreateLinkWithTags {
   shortUrl: string
   comment: FormDataEntryValue | null
   linkTags: Array<number>
+  guestId?: string | null
 }
 
 export const createLink = async (rawDataWithLink: CreateLinkWithTags) => {
-  console.log('hi fron server');
-  console.log(rawDataWithLink);
-  console.log(rawDataWithLink.linkTags);
-
   const link = await prisma.link.create({
     data: {
       title: rawDataWithLink.title ?? '',
@@ -53,10 +50,11 @@ export const createLink = async (rawDataWithLink: CreateLinkWithTags) => {
       img: rawDataWithLink.img ?? '',
       shortUrl: rawDataWithLink.shortUrl ?? '',
       logo: rawDataWithLink.logo ?? '',
+      guestId: rawDataWithLink.guestId ?? null
     }
   })
 
-  const tagIds = rawDataWithLink.linkTags.map(id => id) ; // tus IDs de tag (asegúrate que existan)
+  const tagIds = rawDataWithLink.linkTags.map(id => id);
 
   const linkTagRelations = tagIds.map((tagId) => ({
     linkId: link.id,
@@ -67,21 +65,26 @@ export const createLink = async (rawDataWithLink: CreateLinkWithTags) => {
     data: linkTagRelations,
   });
 
+  console.log(rawDataWithLink.url);
+  console.log(rawDataWithLink.shortUrl);
+  
 
+  const shortLink = await prisma.shortLink.create({
+    data: {
+      url: rawDataWithLink.url ?? '',
+      shortUrl: rawDataWithLink.shortUrl ?? ''
+    }
+  })
 
-  console.log(link.id);
-  // linkTags: {
-  //       connect: rawDataWithLink.linkTags.map(id => ({ id }))
-  //     }
-
+  console.log(shortLink);
 
   revalidatePath('/user')
-  redirect('/user')
+  // redirect(''
+  return link
 }
 
 
 export const createTag = async (formData: FormData) => {
-  console.log('hi Tag');
   const value = formData.get('tagName')?.toString().toLocaleLowerCase()
   if (value?.trim() == '' || value == undefined) return
 
@@ -89,10 +92,6 @@ export const createTag = async (formData: FormData) => {
     value: value,
     label: value?.charAt(0).toLocaleUpperCase() + value?.slice(1)
   }
-
-  console.log(rawData);
-  // return rawData
-
 
   try {
     const tag = await prisma.tag.create({
@@ -104,10 +103,25 @@ export const createTag = async (formData: FormData) => {
   }
 }
 
+export const getAllLinks = async (guestId: string | null) => {
+  return prisma.link.findMany({
+    where: {
+      guestId: guestId
+    },
+    include: {
+      linkTags: {
+        include: {
+          tag: true
+        }
+      }
+    }
+  })
+}
+
 export const getTags = async () => {
   return prisma.tag.findMany()
 }
 
-export const getAllLinks = async () => {
-  return prisma.link.findMany()
-}
+// export const getAllLinks = async () => {
+//   return prisma.link.findMany()
+// }

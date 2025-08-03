@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.13.0
- * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
+ * Prisma Client JS version: 6.12.0
+ * Query Engine version: 8047c96bbd92db98a2abc7c9323ce77c02c89dbc
  */
 Prisma.prismaVersion = {
-  client: "6.13.0",
-  engine: "361e86d0ea4987e9f53a565309b3eed797a6bcbd"
+  client: "6.12.0",
+  engine: "8047c96bbd92db98a2abc7c9323ce77c02c89dbc"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -120,6 +120,15 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  email: 'email',
+  password: 'password',
+  role: 'role',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.LinkScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -130,19 +139,34 @@ exports.Prisma.LinkScalarFieldEnum = {
   shortUrl: 'shortUrl',
   comment: 'comment',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  guestId: 'guestId'
 };
 
 exports.Prisma.TagScalarFieldEnum = {
   id: 'id',
   value: 'value',
-  label: 'label'
+  label: 'label',
+  userId: 'userId',
+  guestId: 'guestId'
 };
 
 exports.Prisma.LinkTagScalarFieldEnum = {
   id: 'id',
   linkId: 'linkId',
-  tagId: 'tagId'
+  tagId: 'tagId',
+  userId: 'userId',
+  guestId: 'guestId'
+};
+
+exports.Prisma.ShortLinkScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  shortUrl: 'shortUrl',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  guestId: 'guestId'
 };
 
 exports.Prisma.SortOrder = {
@@ -155,11 +179,21 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+exports.Role = exports.$Enums.Role = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
 
 exports.Prisma.ModelName = {
+  User: 'User',
   Link: 'Link',
   Tag: 'Tag',
-  LinkTag: 'LinkTag'
+  LinkTag: 'LinkTag',
+  ShortLink: 'ShortLink'
 };
 
 /**

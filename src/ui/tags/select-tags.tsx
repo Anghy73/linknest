@@ -14,26 +14,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { getTags } from "@/lib/actions";
-import prisma from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddTag from "./add-tag";
-
-// const tagsOptions = [
-//   {
-//     value: "tools",
-//     label: "Tools",
-//   },
-//   {
-//     value: "frontend",
-//     label: "Frontend",
-//   },
-//   {
-//     value: "backend",
-//     label: "Backend",
-//   },
-// ];
 
 type TagI = {
   id: number;

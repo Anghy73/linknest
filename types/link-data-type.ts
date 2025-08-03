@@ -45,3 +45,25 @@ export interface Headers {
   "x-vercel-cache": string;
   "x-vercel-id": string;
 }
+
+export interface LinkDataBD {
+  id: number;
+  title: string;
+  description: string;
+  logo: string;
+  img: string;
+  url: string;
+  shortUrl: string;
+  comment: string;
+  userId?: number | null;
+  guestId?: string | null;
+  linkTags: LinkTag[]
+}
+
+export interface LinkTag {
+  id: number;
+  linkId: number;
+  tagId: number;
+  userId: number | null;
+  guestId?: string | null;
+}
