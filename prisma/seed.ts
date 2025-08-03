@@ -14,15 +14,12 @@ const linkData: Prisma.LinkCreateInput[] = [
     linkTags: {
       create: [
         {
-          tag: {
-            create: {
-              value: "tool",
-              label: "Tool"
-            }
-          }
+          tagId: 1,
+          guestId: ""
         }
       ]
-    }
+    },
+    guestId: ""
   }
 ]
 
