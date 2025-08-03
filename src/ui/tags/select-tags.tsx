@@ -37,11 +37,12 @@ export function SelectTags({
   const [open, setOpen] = useState(false);
   const [tagsOptions, setTagsOptions] = useState<TagI[]>();
   const [refresh, setRefresh] = useState<boolean>(false)
+  const guestId = localStorage.getItem('guestId')
 
   useEffect(() => {
     setRefresh(false)
     const getAllTags = async () => {
-      const data = await getTags();
+      const data = await getTags(guestId);
       console.log(data);
       setTagsOptions(data);
     };

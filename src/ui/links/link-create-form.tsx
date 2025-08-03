@@ -61,12 +61,14 @@ function LinkCreateForm() {
   const [urlError, setUrlError] = useState("");
   const [isUrl, setIsUrl] = useState(true);
 
-  const [guestId, setGuestId] = useState<string | null>(null);
-
   const [shortUrl, setShortUrl] = useState("");
   const [tags, setTags] = useState<TagI[]>([]);
 
   const [open, setOpen] = useState(false);
+
+  const [guestId, setGuestId] = useState<string>("");
+
+  const saveLinks = useLinksStore((store) => store.saveLinks)
 
   useEffect(() => {
     let storedGuestId = localStorage.getItem("guestId");
@@ -83,7 +85,7 @@ function LinkCreateForm() {
     setShortUrl("");
     const regex = new RegExp("^https://[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(/.*)?$");
     const url = e.currentTarget.value;
-    if (!guestId) return
+    if (!guestId) return;
     const links = await getAllLinks(guestId);
     const urls = links.map((link) => link.url);
     if (url.trim() == "") return;
@@ -131,13 +133,15 @@ function LinkCreateForm() {
       shortUrl: shortUrl,
       comment: formData.get("comment"),
       linkTags: linkTagsIds,
-      guestId: localStorage.getItem("guestId") ?? null,
+      guestId: guestId,
     };
 
     try {
       const res = await createLink(rawDataWithTags);
       if (res.id) {
         setOpen(false);
+        const res = await getAllLinks(guestId);
+        saveLinks(res);
       }
     } catch (error) {
       console.log(error);
@@ -162,7 +166,11 @@ function LinkCreateForm() {
     <>
       <Dialog onOpenChange={handleOpen} open={open}>
         <DialogTrigger asChild>
-          <Button onClick={() => setOpen(true)} disabled={!guestId} variant="default">
+          <Button
+            onClick={() => setOpen(true)}
+            disabled={!guestId}
+            variant="default"
+          >
             Add Link
           </Button>
         </DialogTrigger>

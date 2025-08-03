@@ -12,13 +12,16 @@ import { SetStateAction, useState } from "react";
 function AddTag({ refresh }: { refresh: React.Dispatch<SetStateAction<boolean>> }) {
   const [tagName, setTagName] = useState('')
 
+  const guestId = localStorage.getItem('guestId')
+  console.log(guestId);
+  
   const handleCreateTag = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
     console.log("create tag");
     const data = new FormData(e.currentTarget);
     try {
-      const res = await createTag(data);
+      const res = await createTag({data, guestId});
       if (res?.id) {
         // mostrar un sonner avisando que se creo
         setTagName('')

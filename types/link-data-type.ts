@@ -56,14 +56,22 @@ export interface LinkDataBD {
   shortUrl: string;
   comment: string;
   userId?: number | null;
-  guestId?: string | null;
-  linkTags: LinkTag[]
+  guestId: string;
+  // linkTags: LinkTag[]
 }
 
 export interface LinkTag {
   id: number;
   linkId: number;
   tagId: number;
-  userId: number | null;
-  guestId?: string | null;
+  userId?: number | null;
+  guestId: string;
+  tag?: Tag[];
+}
+
+export interface Tag {
+  id: number;
+  value: string;
+  label: string;
+  guestId: string;
 }

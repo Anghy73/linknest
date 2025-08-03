@@ -1,17 +1,22 @@
 import { create } from 'zustand'
-import { LinkData } from '../../types/link-data-type';
+import { LinkData, LinkDataBD } from '../../types/link-data-type';
 import { persist } from 'zustand/middleware';
 
 interface LinkStoreI {
-  links: LinkData[],
-  addLink: (link: LinkData) => void
+  links: LinkDataBD[],
+  // addLink: (link: LinkData) => void
+  saveLinks: (links: LinkDataBD[]) => void
 }
 
 const useLinksStore = create(
   persist<LinkStoreI>((set) => ({
     links: [],
-    addLink: (link) => {
-      set((state) => ({ links: [...state.links, link] }))
+    // addLink: (link) => {
+    //   set((state) => ({ links: [...state.links, link] }))
+    // },
+    saveLinks: (links) => {
+      console.log(links);
+      set((state) => ({ links: links}))
     }
   }),
     { name: 'links' }
