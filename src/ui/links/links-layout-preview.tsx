@@ -1,18 +1,3 @@
-import { buttonVariants } from "@/components/ui/button";
-import { BsThreeDots } from "react-icons/bs";
-import { MdEdit } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
-import { FaLink } from "react-icons/fa6";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-
 import { LinkDataBD } from "../../../types/link-data-type";
 
 function LayoutPreview({ links }: { links: LinkDataBD[] }) {

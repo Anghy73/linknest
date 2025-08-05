@@ -8,15 +8,16 @@ import { Button } from "@/components/ui/button";
 import useLinksStore from "@/lib/store";
 
 function LinkFilter() {
-  const [tags, setTags] = useState<Tag[]>();
   const guestId = useLinksStore((store) => store.guestId)
+  const setTagsFilter = useLinksStore((store) => store.setTagsFilter)
   // const guestId = localStorage.getItem("guestId");
 
   useEffect(() => {
     const getAllTags = async () => {
       const data = await getTags(guestId);
       console.log(data);
-      setTags(data);
+      if (!data) return
+      setTagsFilter(data);
     };
 
     getAllTags();
@@ -32,7 +33,7 @@ function LinkFilter() {
           <Separator orientation="vertical"></Separator>
           <div className="flex justify-center items-center gap-2">
             <span className="font-medium">Tags: </span>
-          <LinkFilterByTag tags={tags}></LinkFilterByTag>
+          <LinkFilterByTag></LinkFilterByTag>
           </div>
           <Button type="button" variant={"default"} className="cursor-pointer">Apply</Button>
         </div>

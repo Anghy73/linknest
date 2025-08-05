@@ -6,10 +6,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { createTag } from "@/lib/actions";
+import { createTag, getTags } from "@/lib/actions";
+import useLinksStore from "@/lib/store";
 import { SetStateAction, useState } from "react";
 
 function AddTag({ refresh }: { refresh: React.Dispatch<SetStateAction<boolean>> }) {
+  const setTagsFilter = useLinksStore((store) => store.setTagsFilter)
   const [tagName, setTagName] = useState('')
 
   const guestId = localStorage.getItem('guestId')
@@ -25,6 +27,9 @@ function AddTag({ refresh }: { refresh: React.Dispatch<SetStateAction<boolean>> 
       if (res?.id) {
         // mostrar un sonner avisando que se creo
         setTagName('')
+        const tagsDb = await getTags(guestId)
+        if (!tagsDb) return
+        setTagsFilter(tagsDb)
         refresh(true)
       }
     } catch (error) {

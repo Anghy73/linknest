@@ -5,18 +5,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tag } from "../../../types/link-data-type";
+import useLinksStore from "@/lib/store";
 
-function LinkFilterByTag({ tags }: { tags: Tag[] | undefined }) {
-  console.log(tags);
+function LinkFilterByTag() {
+  const tagsFilter = useLinksStore((store) => store.tagsFilter)
+  console.log(tagsFilter);
   return (
     <Select name="tag-filter">
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Tag" />
       </SelectTrigger>
       <SelectContent>
-        {!!tags && tags.length >= 1
-          ? tags?.map((tag) => (
+        {!!tagsFilter && tagsFilter.length >= 1
+          ? tagsFilter?.map((tag) => (
               <SelectItem key={tag.id} value={tag.value}>
                 {tag.label}
               </SelectItem>
