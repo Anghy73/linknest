@@ -11,7 +11,7 @@ function LinkFilterByTag() {
   const tagsFilter = useLinksStore((store) => store.tagsFilter)
   console.log(tagsFilter);
   return (
-    <Select name="tag-filter">
+    <Select name="tag">
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Tag" />
       </SelectTrigger>

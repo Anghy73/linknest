@@ -159,5 +159,27 @@ export async function deleteLinkWithTags(linkId: number) {
     console.error('Error deleting link with tags:', error);
     throw error;
   }
+}
+
+export async function sortLinksByFilter({ title, guestId }: { title: string | undefined, guestId: string }) {
+  const linksByTitle = await prisma.link.findMany({
+    where: {
+      guestId: guestId,
+      title: {
+        contains: title,
+        mode: "insensitive"
+      },
+    },
+    include: {
+      linkTags: {
+        include: {
+          tag: true 
+        }
+      }
+    }
+  })
+
+  // if (linksByTitle.length == 0) return { msg: "Sin coincidencias" }
+  return linksByTitle
 
 }

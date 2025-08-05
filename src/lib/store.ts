@@ -4,10 +4,12 @@ import { persist } from 'zustand/middleware';
 
 interface LinkStoreI {
   links: LinkDataBD[],
+  linksFilters: LinkDataBD[],
   guestId: string,
   tagsFilter: Tag[],
   // addLink: (link: LinkData) => void
   saveLinks: (links: LinkDataBD[]) => void
+  saveLinksFilter: (links: LinkDataBD[]) => void
   setGuestId: (guestId: string) => void
   setTagsFilter: (tagsFilter: Tag[]) => void
 }
@@ -15,6 +17,7 @@ interface LinkStoreI {
 const useLinksStore = create(
   persist<LinkStoreI>((set) => ({
     links: [],
+    linksFilters: [],
     guestId: "",
     tagsFilter: [],
     // addLink: (link) => {
@@ -30,6 +33,9 @@ const useLinksStore = create(
     setTagsFilter: (tagsFilter) => {
       set((state) => ({ tagsFilter: tagsFilter }))
     },
+    saveLinksFilter: (links) => {
+      set((state) => ({ linksFilters: links }))
+    }
   }),
     { name: 'links' }
   )

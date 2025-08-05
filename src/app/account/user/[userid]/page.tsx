@@ -21,7 +21,12 @@ type LayoutI = "simple" | "info" | "preview";
 export default function Page() {
   // const [username, setUsername] = useState<string>('')
   const links = useLinksStore((store) => store.links);
+  const linksFilters = useLinksStore((store) => store.linksFilters);
+
   const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
+
+  console.log(layoutSelect);
+
   return (
     <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
       <div className="w-full justify-center items-center">
@@ -30,21 +35,24 @@ export default function Page() {
           <LinkFilter></LinkFilter>
           <div className="flex gap-2">
             <button
-            title="simple"
+              title="simple"
+              style={layoutSelect == 'simple' ? { backgroundColor: '#88888844', border: "2px solid black" } : {}}
               onClick={() => setLayoutSelect("simple")}
               className="p-2 border-1 rounded-lg cursor-pointer hover:bg-slate-200/30"
             >
               <TfiLayoutMediaCenter size={25}></TfiLayoutMediaCenter>
             </button>
             <button
-            title="info"
+              title="info"
+              style={layoutSelect == 'info' ? { backgroundColor: '#88888844', border: "2px solid black" } : {}}
               onClick={() => setLayoutSelect("info")}
-              className="p-2 border-1 rounded-lg cursor-pointer hover:bg-slate-200/30"
+              className="p-2 border-1 rounded-lg cursor-pointer hover:bg-slate-200"
             >
               <TfiLayoutMediaLeftAlt size={23}></TfiLayoutMediaLeftAlt>
             </button>
             <button
-            title="preview"
+              title="preview"
+              style={layoutSelect == 'preview' ? { backgroundColor: '#88888844', border: "2px solid black" } : {}}
               onClick={() => setLayoutSelect("preview")}
               className="p-2 border-1 rounded-lg cursor-pointer hover:bg-slate-200/30"
             >
@@ -52,13 +60,27 @@ export default function Page() {
             </button>
           </div>
           <div className="w-full justify-center items-center">
-            {layoutSelect == "simple" && (
-              <LayoutSimple links={links}></LayoutSimple>
-            )}
-            {layoutSelect == "info" && <LayoutInfo links={links}></LayoutInfo>}
-            {layoutSelect == "preview" && (
-              <LayoutPreview links={links}></LayoutPreview>
-            )}
+            {layoutSelect == "simple" ? (
+              linksFilters.length >= 1 ? (
+                <LayoutSimple links={linksFilters}></LayoutSimple>
+              ) : (
+                <LayoutSimple links={links}></LayoutSimple>
+              )
+            ) : null}
+            {layoutSelect == "info" ? (
+              linksFilters.length >= 1 ? (
+                <LayoutInfo links={linksFilters}></LayoutInfo>
+              ) : (
+                <LayoutInfo links={links}></LayoutInfo>
+              )
+            ) : null}
+            {layoutSelect == "preview" ? (
+              linksFilters.length >= 1 ? (
+                <LayoutPreview links={linksFilters}></LayoutPreview>
+              ) : (
+                <LayoutPreview links={links}></LayoutPreview>
+              )
+            ) : null}
           </div>
         </div>
       </div>
