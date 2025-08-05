@@ -15,8 +15,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 
 type LayoutI = "simple" | "info" | "preview";
 
-export default function Page({ params }: {params: {user:string}}) {
-  const username = params.user
+export default function Page({ params }: {params: {  userid: string}}) {
+  const username = params.userid
   const saveLinks = useLinksStore((store) => store.saveLinks);
   const links = useLinksStore((store) => store.links);
 
