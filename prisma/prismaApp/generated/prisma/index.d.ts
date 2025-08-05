@@ -7589,16 +7589,16 @@ export namespace Prisma {
 
   export type TagWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    value?: string
     AND?: TagWhereInput | TagWhereInput[]
     OR?: TagWhereInput[]
     NOT?: TagWhereInput | TagWhereInput[]
+    value?: StringFilter<"Tag"> | string
     label?: StringFilter<"Tag"> | string
     userId?: IntNullableFilter<"Tag"> | number | null
     guestId?: StringFilter<"Tag"> | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     links?: LinkTagListRelationFilter
-  }, "id" | "value">
+  }, "id">
 
   export type TagOrderByWithAggregationInput = {
     id?: SortOrder
