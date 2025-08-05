@@ -11,12 +11,15 @@ import LinkFilter from "@/ui/filters/link-filters";
 import { TfiLayoutMediaCenter } from "react-icons/tfi";
 import { TfiLayoutMediaCenterAlt } from "react-icons/tfi";
 import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
-import { Button, buttonVariants } from "@/components/ui/button";
 
 type LayoutI = "simple" | "info" | "preview";
 
-export default function Page({ params }: {params: {  userid: string}}) {
-  const username = params.userid
+interface PageProps {
+  params: Promise<{ userid: string }>; // Define params as a Promise
+}
+
+export default async function Page({ params }: PageProps) {
+  const username = (await params).userid
   const saveLinks = useLinksStore((store) => store.saveLinks);
   const links = useLinksStore((store) => store.links);
 
