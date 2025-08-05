@@ -161,25 +161,37 @@ export async function deleteLinkWithTags(linkId: number) {
   }
 }
 
-export async function sortLinksByFilter({ title, guestId }: { title: string | undefined, guestId: string }) {
-  const linksByTitle = await prisma.link.findMany({
+export async function sortLinksByFilter({ title, tag, guestId }: { title: string | undefined, guestId: string, tag: string | undefined }) {
+  if (tag && tag == ' ') {
+    tag=''
+  }
+  const linksFilter = await prisma.link.findMany({
     where: {
       guestId: guestId,
-      title: {
+      title: title ? {
         contains: title,
-        mode: "insensitive"
-      },
+        mode: "insensitive",
+      } : undefined,
+      linkTags: tag ? {
+        some: {
+          tag: {
+            value: {
+              contains: tag,
+              mode: 'insensitive'
+            }
+          }
+        }
+      } : undefined
     },
     include: {
       linkTags: {
         include: {
-          tag: true 
+          tag: true
         }
       }
     }
   })
 
-  // if (linksByTitle.length == 0) return { msg: "Sin coincidencias" }
-  return linksByTitle
+  return linksFilter
 
 }

@@ -16,6 +16,7 @@ function LinkFilterByTag() {
         <SelectValue placeholder="Tag" />
       </SelectTrigger>
       <SelectContent>
+        <SelectItem value=" ">nothing</SelectItem>
         {!!tagsFilter && tagsFilter.length >= 1
           ? tagsFilter?.map((tag) => (
               <SelectItem key={tag.id} value={tag.value}>
