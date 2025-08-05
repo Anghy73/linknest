@@ -15,10 +15,10 @@ import { Button, buttonVariants } from "@/components/ui/button";
 
 type LayoutI = "simple" | "info" | "preview";
 
-export default function Page() {
+export default function Page({ params }: {params: {user:string}}) {
+  const username = params.user
   const saveLinks = useLinksStore((store) => store.saveLinks);
   const links = useLinksStore((store) => store.links);
-  const [guestId, setGuestId] = useState<string>("");
 
   const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
 
@@ -29,7 +29,6 @@ export default function Page() {
         storedGuestId = crypto.randomUUID();
         localStorage.setItem("guestId", storedGuestId);
       }
-      setGuestId(storedGuestId);
 
       const res = await getAllLinks(storedGuestId);
       saveLinks(res);
@@ -43,6 +42,7 @@ export default function Page() {
     <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
       <div className="w-full justify-center items-center">
         <div className="w-full flex flex-col justify-center items-center gap-6 mx-auto">
+          <p className="py-2 font-bold">hello {username}</p>
           <LinkFilter></LinkFilter>
           <div className="flex gap-2">
             <button
