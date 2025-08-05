@@ -22,16 +22,6 @@ export default function Page() {
   // const [username, setUsername] = useState<string>('')
   const links = useLinksStore((store) => store.links);
   const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
-
-  // useEffect(() => {
-  //   const initUsername = async () => {
-  //     const res = (await params).userid
-  //     console.log(res);
-  //     setUsername(res)
-  //   }
-  //   initUsername()
-  // }, [])
-
   return (
     <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
       <div className="w-full justify-center items-center">

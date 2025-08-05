@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   DropdownMenu,
@@ -15,11 +15,23 @@ import { MdDelete } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
 import { TbCopy } from "react-icons/tb";
 import { Button, buttonVariants } from "@/components/ui/button";
-import useLinksStore from "@/lib/store";
 import { LinkDataBD } from "../../../types/link-data-type";
+import { deleteLinkWithTags, getAllLinks } from "@/lib/actions";
+import useLinksStore from "@/lib/store";
 
 function LayoutSimple({ links }: { links: LinkDataBD[] }) {
   console.log(links);
+  const guestId = useLinksStore((store) => store.guestId)
+  const saveLinks = useLinksStore((store) => store.saveLinks)
+
+
+  const deleteLink = async (linkId: number) => {
+    const res = await deleteLinkWithTags(linkId)
+    if (!res) return
+    const linksFresh = await getAllLinks(guestId)
+    saveLinks(linksFresh)
+  }
+
   if (!links || links.length === 0) {
     return (
       <div className="text-center text-slate-500 py-10">
@@ -98,14 +110,15 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
                 </span>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <span
+                <button
+                onClick={() => deleteLink(link.id)}
                   className={`${buttonVariants({
                     variant: "ghost",
                   })} cursor-pointer w-full flex justify-start`}
                 >
                   <MdDelete></MdDelete>
                   Delete
-                </span>
+                </button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

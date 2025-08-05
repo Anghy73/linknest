@@ -43,7 +43,7 @@ interface CreateLinkWithTags {
 
 export const createLink = async (rawDataWithLink: CreateLinkWithTags) => {
   console.log(rawDataWithLink.guestId);
-  
+
   const link = await prisma.link.create({
     data: {
       title: rawDataWithLink.title ?? '',
@@ -71,7 +71,7 @@ export const createLink = async (rawDataWithLink: CreateLinkWithTags) => {
 
   console.log(rawDataWithLink.url);
   console.log(rawDataWithLink.shortUrl);
-  
+
 
   const shortLink = await prisma.shortLink.create({
     data: {
@@ -81,12 +81,12 @@ export const createLink = async (rawDataWithLink: CreateLinkWithTags) => {
     }
   })
 
-  revalidatePath('/user')
+  revalidatePath('/account/user/id')
   return link
 }
 
 
-export const createTag = async ({data, guestId}: {data: FormData, guestId: string | null}) => {
+export const createTag = async ({ data, guestId }: { data: FormData, guestId: string | null }) => {
   const value = data.get('tagName')?.toString().toLocaleLowerCase()
   if (value?.trim() == '' || value == undefined) return
 
@@ -138,6 +138,26 @@ export const getTags = async (guestId: string | null) => {
   })
 }
 
-// export const getAllLinks = async () => {
-//   return prisma.link.findMany()
-// }
+export async function deleteLinkWithTags(linkId: number) {
+  try {
+    // Elimina primero las relaciones LinkTag
+    await prisma.linkTag.deleteMany({
+      where: {
+        linkId,
+      },
+    });
+
+    // Luego elimina el Link
+    const deletedLink = await prisma.link.delete({
+      where: {
+        id: linkId,
+      },
+    });
+    revalidatePath('/account/user/id')
+    return deletedLink;
+  } catch (error) {
+    console.error('Error deleting link with tags:', error);
+    throw error;
+  }
+
+}
