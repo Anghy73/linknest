@@ -57,7 +57,7 @@ export interface LinkDataBD {
   comment: string;
   userId?: number | null;
   guestId: string;
-  // linkTags: LinkTag[]
+  linkTags: LinkTag[]
 }
 
 export interface LinkTag {
@@ -66,7 +66,7 @@ export interface LinkTag {
   tagId: number;
   userId?: number | null;
   guestId: string;
-  tag?: Tag[];
+  tag: Tag;
 }
 
 export interface Tag {

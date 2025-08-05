@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import LayoutSimple from "@/ui/links/links-layout-simple";
 import { getAllLinks } from "@/lib/actions";
 import useLinksStore from "@/lib/store";
+import LayoutInfo from "@/ui/links/links-layout-info";
 
 export default function Page() {
   const saveLinks = useLinksStore((store) => store.saveLinks)
@@ -30,7 +31,8 @@ export default function Page() {
       <h1>Link Nest</h1>
       <div className="w-full">
         <div className="text-center">
-          <LayoutSimple links={links}></LayoutSimple>
+          {/* <LayoutSimple links={links}></LayoutSimple> */}
+          <LayoutInfo links={links}></LayoutInfo>
         </div>
       </div>
     </div>
