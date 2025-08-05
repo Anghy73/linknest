@@ -14,29 +14,29 @@ import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
 
 type LayoutI = "simple" | "info" | "preview";
 
-interface PageProps {
-  params: Promise<{ userid: string }>; // Define params as a Promise
-}
+// interface PageProps {
+//   params: Promise<{ userid: string }>; // Define params as a Promise
+// }
 
-export default function Page({ params }: PageProps) {
-  const [username, setUsername] = useState<string>('')
+export default function Page() {
+  // const [username, setUsername] = useState<string>('')
   const links = useLinksStore((store) => store.links);
   const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
 
-  useEffect(() => {
-    const initUsername = async () => {
-      const res = (await params).userid
-      console.log(res);
-      setUsername(res)
-    }
-    initUsername()
-  }, [])
+  // useEffect(() => {
+  //   const initUsername = async () => {
+  //     const res = (await params).userid
+  //     console.log(res);
+  //     setUsername(res)
+  //   }
+  //   initUsername()
+  // }, [])
 
   return (
     <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
       <div className="w-full justify-center items-center">
         <div className="w-full flex flex-col justify-center items-center gap-6 mx-auto">
-          <p className="py-2 font-bold">hello {username}</p>
+          {/* <p className="py-2 font-bold">hello {username}</p> */}
           <LinkFilter></LinkFilter>
           <div className="flex gap-2">
             <button
