@@ -29,16 +29,15 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-6 px-20">
-      <h2>links-layout-simple</h2>
+    <div className="w-full flex flex-col items-center gap-6">
       {links?.map((link) => (
         <div
           className="w-full flex justify-between max-w-6xl py-2 px-3 border-2 rounded-2xl border-black/30"
           key={link.id}
         >
-          <figure className="w-15 h-15 rounded-full overflow-hidden object-contain p-1 mr-2">
+          <figure className="w-15 h-15 rounded-full overflow-hidden p-1 mr-2">
             <img
-              className="w-full h-full"
+              className="w-full h-full object-contain"
               src={link.logo}
               alt={`Icon of ${link.title}`}
             />

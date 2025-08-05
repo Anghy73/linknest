@@ -1,15 +1,26 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import LayoutSimple from "@/ui/links/links-layout-simple";
 import { getAllLinks } from "@/lib/actions";
 import useLinksStore from "@/lib/store";
 import LayoutInfo from "@/ui/links/links-layout-info";
+import LayoutPreview from "@/ui/links/links-layout-preview";
+import LinkFilter from "@/ui/filters/link-filters";
+
+import { TfiLayoutMediaCenter } from "react-icons/tfi";
+import { TfiLayoutMediaCenterAlt } from "react-icons/tfi";
+import { TfiLayoutMediaLeftAlt } from "react-icons/tfi";
+import { Button, buttonVariants } from "@/components/ui/button";
+
+type LayoutI = "simple" | "info" | "preview";
 
 export default function Page() {
-  const saveLinks = useLinksStore((store) => store.saveLinks)
-  const links = useLinksStore((store) => store.links)
+  const saveLinks = useLinksStore((store) => store.saveLinks);
+  const links = useLinksStore((store) => store.links);
   const [guestId, setGuestId] = useState<string>("");
+
+  const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
 
   useEffect(() => {
     const initGuestAndLinks = async () => {
@@ -19,20 +30,52 @@ export default function Page() {
         localStorage.setItem("guestId", storedGuestId);
       }
       setGuestId(storedGuestId);
-  
+
       const res = await getAllLinks(storedGuestId);
       saveLinks(res);
-    }
-    initGuestAndLinks()
+    };
+    initGuestAndLinks();
   }, []);
 
+  console.log(layoutSelect);
+
   return (
-    <div className="flex flex-col gap-10 justify-center items-center min-h-screen py-20">
-      <h1>Link Nest</h1>
-      <div className="w-full">
-        <div className="text-center">
-          {/* <LayoutSimple links={links}></LayoutSimple> */}
-          <LayoutInfo links={links}></LayoutInfo>
+    <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
+      <div className="w-full justify-center items-center">
+        <div className="w-full flex flex-col justify-center items-center gap-6 mx-auto">
+          <LinkFilter></LinkFilter>
+          <div className="flex gap-2">
+            <button
+            title="simple"
+              onClick={() => setLayoutSelect("simple")}
+              className="p-2 border-1 rounded-lg cursor-pointer hover:bg-slate-200/30"
+            >
+              <TfiLayoutMediaCenter size={25}></TfiLayoutMediaCenter>
+            </button>
+            <button
+            title="info"
+              onClick={() => setLayoutSelect("info")}
+              className="p-2 border-1 rounded-lg cursor-pointer hover:bg-slate-200/30"
+            >
+              <TfiLayoutMediaLeftAlt size={23}></TfiLayoutMediaLeftAlt>
+            </button>
+            <button
+            title="preview"
+              onClick={() => setLayoutSelect("preview")}
+              className="p-2 border-1 rounded-lg cursor-pointer hover:bg-slate-200/30"
+            >
+              <TfiLayoutMediaCenterAlt size={23}></TfiLayoutMediaCenterAlt>
+            </button>
+          </div>
+          <div className="w-full justify-center items-center">
+            {layoutSelect == "simple" && (
+              <LayoutSimple links={links}></LayoutSimple>
+            )}
+            {layoutSelect == "info" && <LayoutInfo links={links}></LayoutInfo>}
+            {layoutSelect == "preview" && (
+              <LayoutPreview links={links}></LayoutPreview>
+            )}
+          </div>
         </div>
       </div>
     </div>
