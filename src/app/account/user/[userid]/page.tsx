@@ -18,28 +18,19 @@ interface PageProps {
   params: Promise<{ userid: string }>; // Define params as a Promise
 }
 
-export default async function Page({ params }: PageProps) {
-  const username = (await params).userid
-  const saveLinks = useLinksStore((store) => store.saveLinks);
+export default function Page({ params }: PageProps) {
+  const [username, setUsername] = useState<string>('')
   const links = useLinksStore((store) => store.links);
-
   const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
 
   useEffect(() => {
-    const initGuestAndLinks = async () => {
-      let storedGuestId = localStorage.getItem("guestId");
-      if (!storedGuestId) {
-        storedGuestId = crypto.randomUUID();
-        localStorage.setItem("guestId", storedGuestId);
-      }
-
-      const res = await getAllLinks(storedGuestId);
-      saveLinks(res);
-    };
-    initGuestAndLinks();
-  }, []);
-
-  console.log(layoutSelect);
+    const initUsername = async () => {
+      const res = (await params).userid
+      console.log(res);
+      setUsername(res)
+    }
+    initUsername()
+  }, [])
 
   return (
     <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
