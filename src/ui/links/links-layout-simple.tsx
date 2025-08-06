@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   DropdownMenu,
@@ -18,19 +18,51 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { LinkDataBD } from "../../../types/link-data-type";
 import { deleteLinkWithTags, getAllLinks } from "@/lib/actions";
 import useLinksStore from "@/lib/store";
+import { useEffect, useState } from "react";
 
 function LayoutSimple({ links }: { links: LinkDataBD[] }) {
-  console.log(links);
-  const guestId = useLinksStore((store) => store.guestId)
-  const saveLinks = useLinksStore((store) => store.saveLinks)
-
+  const [copyStatus, setCopyStatus] = useState<
+    { status: boolean; linkId: number | null } | undefined
+  >();
+  const guestId = useLinksStore((store) => store.guestId);
+  const saveLinks = useLinksStore((store) => store.saveLinks);
 
   const deleteLink = async (linkId: number) => {
-    const res = await deleteLinkWithTags(linkId)
-    if (!res) return
-    const linksFresh = await getAllLinks(guestId)
-    saveLinks(linksFresh)
-  }
+    const res = await deleteLinkWithTags(linkId);
+    if (!res) return;
+    const linksFresh = await getAllLinks(guestId);
+    saveLinks(linksFresh);
+  };
+
+  const handleCopy = async (linkId: number, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyStatus({
+        status: true,
+        linkId: linkId,
+      });
+    } catch (err) {
+      setCopyStatus({
+        status: false,
+        linkId: null,
+      });
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const setCopyStatusValue = () => {
+      if (copyStatus) {
+        setTimeout(() => {
+          setCopyStatus({
+            status: false,
+            linkId: null,
+          });
+        }, 2000);
+      }
+    };
+    setCopyStatusValue();
+  }, [copyStatus]);
 
   if (!links || links.length === 0) {
     return (
@@ -63,19 +95,24 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
               >
                 {link.title}
               </a>
-              <Button variant={"ghost"} className="cursor-pointer">
-                <TbCopy></TbCopy>
+              <Button
+                onClick={() => handleCopy(link.id, link.url)}
+                variant={"ghost"}
+                className="cursor-pointer"
+              >
+                {copyStatus?.status ? (
+                  link.id == copyStatus.linkId ? (
+                    "L"
+                  ) : (
+                    <TbCopy></TbCopy>
+                  )
+                ) : (
+                  <TbCopy></TbCopy>
+                )}
               </Button>
             </div>
             <span className="text-slate-500">{link.url}</span>
           </div>
-          {/* <div>
-            {
-              link?.linkTags.length >= 1 ? link.linkTags.map((tag) => (
-                <div key={tag.id}>{tag.tag.label}</div>
-              )) : null 
-            }
-          </div> */}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <span
@@ -101,6 +138,7 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <span
+                  onClick={() => handleCopy(link.id, link.url)}
                   className={`${buttonVariants({
                     variant: "ghost",
                   })} cursor-pointer w-full flex justify-start`}
@@ -111,7 +149,7 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button
-                onClick={() => deleteLink(link.id)}
+                  onClick={() => deleteLink(link.id)}
                   className={`${buttonVariants({
                     variant: "ghost",
                   })} cursor-pointer w-full flex justify-start`}

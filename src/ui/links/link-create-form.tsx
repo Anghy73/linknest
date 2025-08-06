@@ -170,6 +170,7 @@ function LinkCreateForm() {
             onClick={() => setOpen(true)}
             disabled={!guestId}
             variant="default"
+            className="cursor-pointer"
           >
             Add Link
           </Button>

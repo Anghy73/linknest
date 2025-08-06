@@ -14,9 +14,40 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { deleteLinkWithTags, getAllLinks } from "@/lib/actions";
+import useLinksStore from "@/lib/store";
+import { useState } from "react";
 
 function LayoutInfo({ links }: { links: LinkDataBD[] }) {
-  console.log(links);
+  const [copyStatus, setCopyStatus] = useState<
+    { status: boolean; linkId: number | null } | undefined
+  >();
+  const guestId = useLinksStore((store) => store.guestId);
+  const saveLinks = useLinksStore((store) => store.saveLinks);
+
+  const deleteLink = async (linkId: number) => {
+    const res = await deleteLinkWithTags(linkId);
+    if (!res) return;
+    const linksFresh = await getAllLinks(guestId);
+    saveLinks(linksFresh);
+  };
+
+  const handleCopy = async (linkId: number, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyStatus({
+        status: true,
+        linkId: linkId,
+      });
+    } catch (err) {
+      setCopyStatus({
+        status: false,
+        linkId: null,
+      });
+      console.log(err);
+    }
+  };
+
   if (!links || links.length === 0) {
     return (
       <div className="text-center text-slate-500 py-10">
@@ -89,6 +120,7 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <span
+                            onClick={() => handleCopy(link.id, link.url)}
                               className={`${buttonVariants({
                                 variant: "ghost",
                               })} cursor-pointer w-full flex justify-start`}
@@ -99,6 +131,7 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <span
+                              onClick={() => deleteLink(link.id)}
                               className={`${buttonVariants({
                                 variant: "ghost",
                               })} cursor-pointer w-full flex justify-start`}
