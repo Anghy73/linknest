@@ -19,6 +19,8 @@ import { LinkDataBD } from "../../../types/link-data-type";
 import { deleteLinkWithTags, getAllLinks } from "@/lib/actions";
 import useLinksStore from "@/lib/store";
 import { useEffect, useState } from "react";
+import LinkEditForm from "./link-edit-form";
+import Link from "next/link";
 
 function LayoutSimple({ links }: { links: LinkDataBD[] }) {
   const [copyStatus, setCopyStatus] = useState<
@@ -127,14 +129,16 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
               <DropdownMenuLabel className="text-xl">Options</DropdownMenuLabel>
               <DropdownMenuSeparator></DropdownMenuSeparator>
               <DropdownMenuItem>
-                <span
-                  className={`${buttonVariants({
-                    variant: "ghost",
-                  })} cursor-pointer w-full flex justify-start`}
-                >
-                  <MdEdit></MdEdit>
-                  Edit
-                </span>
+                <Link href={`/link/${link.id}/edit`} className="w-full">
+                  <span
+                    className={`${buttonVariants({
+                      variant: "ghost",
+                    })} cursor-pointer w-full flex justify-start`}
+                  >
+                    <MdEdit></MdEdit>
+                    Edit
+                  </span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <span

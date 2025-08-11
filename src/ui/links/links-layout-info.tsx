@@ -56,8 +56,9 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
     );
   }
 
+  console.log(links);
+  // const tagsLink = links.map((link) => link.linkTags);
   const tagsLink = links.map((link) => link.linkTags);
-  console.log(tagsLink[0]);
 
   return (
     <>
@@ -120,7 +121,7 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <span
-                            onClick={() => handleCopy(link.id, link.url)}
+                              onClick={() => handleCopy(link.id, link.url)}
                               className={`${buttonVariants({
                                 variant: "ghost",
                               })} cursor-pointer w-full flex justify-start`}
@@ -154,7 +155,7 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
               </div>
               <div className="flex py-4 gap-2">
                 <span className="font-medium">Tags: </span>
-                {tagsLink[0].map((tag) => (
+                {link.linkTags.map((tag) => (
                   <Badge variant={"outline"} key={tag.id}>
                     {tag.tag.label}
                   </Badge>

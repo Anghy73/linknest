@@ -163,7 +163,7 @@ export async function deleteLinkWithTags(linkId: number) {
 
 export async function sortLinksByFilter({ title, tag, guestId }: { title: string | undefined, guestId: string, tag: string | undefined }) {
   if (tag && tag == ' ') {
-    tag=''
+    tag = ''
   }
   const linksFilter = await prisma.link.findMany({
     where: {
@@ -193,5 +193,63 @@ export async function sortLinksByFilter({ title, tag, guestId }: { title: string
   })
 
   return linksFilter
+}
 
+// type UpdateTagI = {
+//   id: number;
+//   value: string;
+//   label: string;
+//   userId?: string;
+//   guestId?: string;
+// };
+
+type updateLinkData = {
+  id: number
+  title: string
+  comment: string
+  updateTagsIds: { tagId: number }[]
+  guestId: string
+}
+
+export const updateLinkWithTags = async (data: updateLinkData) => {
+  console.log(data.guestId);
+  console.log(data.updateTagsIds);
+  console.log(data);
+  const { id, guestId } = data
+  if (!id || !guestId) return
+
+  await prisma.link.update({
+    where: { id },
+    data: {
+      title: data.title,
+      comment: data.comment,
+    },
+  });
+
+  await prisma.linkTag.deleteMany({
+    where: { linkId: id, guestId: data.guestId }
+  });
+
+  const newLinkTags = data.updateTagsIds.map(tagId => ({
+    linkId: id,
+    tagId: tagId.tagId,
+    guestId: data.guestId,
+  }));
+  await prisma.linkTag.createMany({
+    data: newLinkTags,
+  });
+
+  // Opcional: retornar el link actualizado con tags nuevos
+  const updatedLink = await prisma.link.findUnique({
+    where: { id },
+    include: {
+      linkTags: {
+        include: {
+          tag: true,
+        }
+      }
+    }
+  });
+
+  return updatedLink;
 }

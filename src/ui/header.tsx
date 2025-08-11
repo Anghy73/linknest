@@ -9,7 +9,7 @@ function Header() {
       <ul>
         <li className="flex gap-4">
           <LinkCreateForm></LinkCreateForm>
-          <Link href="/account/login" className={buttonVariants({ variant: "outline"})}>Login</Link>
+          {/* <Link href="/account/login" className={buttonVariants({ variant: "outline"})}>Login</Link> */}
         </li>
       </ul>
     </header>

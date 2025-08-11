@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import AddTag from "./add-tag";
+import useLinksStore from "@/lib/store";
 
 type TagI = {
   id: number;
@@ -37,7 +38,7 @@ export function SelectTags({
   const [open, setOpen] = useState(false);
   const [tagsOptions, setTagsOptions] = useState<TagI[]>();
   const [refresh, setRefresh] = useState<boolean>(false)
-  const guestId = localStorage.getItem('guestId')
+  const guestId = useLinksStore((state) => state.guestId)
 
   useEffect(() => {
     setRefresh(false)
@@ -49,6 +50,9 @@ export function SelectTags({
 
     getAllTags();
   }, [refresh]);
+
+  console.log(tags);
+  
 
   return (
     <>
@@ -88,7 +92,7 @@ export function SelectTags({
                       key={tag.value}
                       value={tag.value}
                       onSelect={(currentValue) => {
-                        if (tags.includes(tag)) {
+                        if (tags.some((tagV) => tagV.value == tag.value)) {
                           const filterTags = tags.filter(
                             (tag) => tag.value != currentValue
                           );
@@ -97,6 +101,8 @@ export function SelectTags({
                           setOpen(false);
                           return;
                         }
+                        console.log('tags values: ' + tags);
+                        
 
                         addTag(tag);
                         setOpen(false);
@@ -106,7 +112,7 @@ export function SelectTags({
                       <Check
                         className={cn(
                           "ml-auto",
-                          tags.includes(tag) ? "opacity-100" : "opacity-0"
+                          tags.some((tagV) => tagV.value == tag.value) ? "opacity-100" : "opacity-0"
                         )}
                       />
                     </CommandItem>

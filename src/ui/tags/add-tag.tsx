@@ -12,10 +12,8 @@ import { SetStateAction, useState } from "react";
 
 function AddTag({ refresh }: { refresh: React.Dispatch<SetStateAction<boolean>> }) {
   const setTagsFilter = useLinksStore((store) => store.setTagsFilter)
+  const guestId = useLinksStore((store) => store.guestId)
   const [tagName, setTagName] = useState('')
-
-  const guestId = localStorage.getItem('guestId')
-  console.log(guestId);
   
   const handleCreateTag = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

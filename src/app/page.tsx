@@ -1,6 +1,7 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
+import { getAllLinks } from "@/lib/actions";
 import useLinksStore from "@/lib/store";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -8,6 +9,8 @@ import { useEffect } from "react";
 export default function Home() {
   const setGuestId = useLinksStore((store) => store.setGuestId);
   const guestId = useLinksStore((store) => store.guestId);
+  const saveLinks = useLinksStore((store) => store.saveLinks);
+  const saveLinksFilter = useLinksStore((store) => store.saveLinksFilter);
 
   useEffect(() => {
     const initGuest = async () => {
@@ -17,10 +20,13 @@ export default function Home() {
         localStorage.setItem("guestId", storedGuestId);
       }
       setGuestId(storedGuestId)
+
+      const rest = await getAllLinks(storedGuestId)
+      saveLinks(rest)
+      saveLinksFilter([])
     };
     initGuest();
-  }, []);
-  // const user = 'user'
+  }, [guestId]);
   console.log(guestId);
   
   return (

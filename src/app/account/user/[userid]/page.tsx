@@ -19,13 +19,13 @@ type LayoutI = "simple" | "info" | "preview";
 // }
 
 export default function Page() {
-  // const [username, setUsername] = useState<string>('')
   const links = useLinksStore((store) => store.links);
   const linksFilters = useLinksStore((store) => store.linksFilters);
 
   const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
 
-  console.log(layoutSelect);
+  console.log(links);
+  
 
   return (
     <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
