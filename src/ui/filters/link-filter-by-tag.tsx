@@ -8,24 +8,28 @@ import {
 import useLinksStore from "@/lib/store";
 
 function LinkFilterByTag() {
-  const tagsFilter = useLinksStore((store) => store.tagsFilter)
+  const tagsFilter = useLinksStore((store) => store.tagsFilter);
   console.log(tagsFilter);
   return (
-    <Select name="tag">
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Tag" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value=" ">nothing</SelectItem>
-        {!!tagsFilter && tagsFilter.length >= 1
-          ? tagsFilter?.map((tag) => (
+    <div className="w-full">
+      <Select name="tag">
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Tag" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value=" ">nothing</SelectItem>
+          {!!tagsFilter && tagsFilter.length >= 1 ? (
+            tagsFilter?.map((tag) => (
               <SelectItem key={tag.id} value={tag.value}>
                 {tag.label}
               </SelectItem>
             ))
-          : <SelectItem value="no-tags">No se encontraron tags</SelectItem>}
-      </SelectContent>
-    </Select>
+          ) : (
+            <SelectItem value="no-tags">No se encontraron tags</SelectItem>
+          )}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 

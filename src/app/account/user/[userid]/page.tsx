@@ -28,12 +28,13 @@ export default function Page() {
   
 
   return (
-    <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30">
-      <div className="w-full justify-center items-center">
-        <div className="w-full flex flex-col justify-center items-center gap-6 mx-auto">
-          {/* <p className="py-2 font-bold">hello {username}</p> */}
-          <LinkFilter></LinkFilter>
-          <div className="flex gap-2">
+    <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30 px-2">
+      <div className="w-full flex justify-center items-center">
+        <div className="w-full flex flex-col">
+          <div className="mb-30 md:mb-10">
+            <LinkFilter></LinkFilter>
+          </div>
+          <div className="flex gap-2 justify-center items-center mb-8">
             <button
               title="simple"
               style={layoutSelect == 'simple' ? { backgroundColor: '#88888844', border: "2px solid black" } : {}}

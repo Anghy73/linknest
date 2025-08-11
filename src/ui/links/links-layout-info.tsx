@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { deleteLinkWithTags, getAllLinks } from "@/lib/actions";
 import useLinksStore from "@/lib/store";
 import { useState } from "react";
+import Link from "next/link";
 
 function LayoutInfo({ links }: { links: LinkDataBD[] }) {
   const [copyStatus, setCopyStatus] = useState<
@@ -62,7 +63,7 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
 
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 px-20 justify-items-center">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 justify-items-center">
         {links?.map((link) => (
           <div
             className="flex flex-col gap-3 w-full border-2 p-2 rounded-md  border-black/30 max-w-[500px] pb-6"
@@ -110,14 +111,19 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
                           </DropdownMenuLabel>
                           <DropdownMenuSeparator></DropdownMenuSeparator>
                           <DropdownMenuItem>
-                            <span
-                              className={`${buttonVariants({
-                                variant: "ghost",
-                              })} cursor-pointer w-full flex justify-start`}
+                            <Link
+                              href={`/link/${link.id}/edit`}
+                              className="w-full"
                             >
-                              <MdEdit></MdEdit>
-                              Edit
-                            </span>
+                              <span
+                                className={`${buttonVariants({
+                                  variant: "ghost",
+                                })} cursor-pointer w-full flex justify-start`}
+                              >
+                                <MdEdit></MdEdit>
+                                Edit
+                              </span>
+                            </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <span

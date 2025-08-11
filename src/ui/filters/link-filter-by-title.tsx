@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 function LinkFilterByTitle() {
   return (
     <>
-      <Input name="title" type="text" placeholder="Title..."></Input>
+      <Input className="w-full" name="title" type="text" placeholder="Title..."></Input>
     </>
   )
 }

@@ -11,7 +11,7 @@ function LayoutPreview({ links }: { links: LinkDataBD[] }) {
   }
   return (
     <>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 px-20 justify-items-center">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 justify-items-center">
         {links?.map((link) => (
           <a key={link.id} href={link.url} target="_blank" className="grid w-full">
             <div className="grid grid-rows-3 grid-cols-1 auto-rows-fr border-2 p-2 rounded-md border-black/30">

@@ -29,7 +29,7 @@ async function EditLinkPage(props: {
   }
   
   return (
-    <main className="w-full h-screen gird place-content-center">
+    <main className="w-full h-screen gird place-content-center px-2">
       <h3 className="text-center font-medium text-xl mb-6">Edit Link</h3>
       <LinkEditForm link={link} ></LinkEditForm>
     </main>

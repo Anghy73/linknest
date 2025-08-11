@@ -175,7 +175,7 @@ function LinkCreateForm() {
             Add Link
           </Button>
         </DialogTrigger>
-        <DialogContent className="md:min-w-5xl">
+        <DialogContent className="md:min-w-3xl lg:min-w-6xl">
           <DialogHeader className="mb-4">
             <DialogTitle>Add link</DialogTitle>
             <DialogDescription>
@@ -211,7 +211,6 @@ function LinkCreateForm() {
                   </div>
                   {urlError && <span className="text-red-400">{urlError}</span>}
                 </div>
-                {/* <div className="grid gap-3"> */}
                 <div className="grid gap-3">
                   <Label htmlFor="shortUrl">Short Link</Label>
                   <div className="flex">
@@ -247,7 +246,7 @@ function LinkCreateForm() {
                   </div>
                 </div>
               </div>
-              <div className="flex-1">
+              <div className="flex-1 hidden md:block">
                 <div>
                   <PreviewLink
                     urlDataLoader={urlDataLoader}

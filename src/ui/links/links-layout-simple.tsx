@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { BsThreeDots } from "react-icons/bs";
-import { MdEdit } from "react-icons/md";
+import { MdDownloadDone, MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
 import { TbCopy } from "react-icons/tb";
@@ -78,10 +78,10 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
     <div className="w-full flex flex-col items-center gap-6">
       {links?.map((link) => (
         <div
-          className="w-full flex justify-between max-w-6xl py-2 px-3 border-2 rounded-2xl border-black/30"
+          className="w-full flex justify-center items-center max-w-6xl py-2 px-3 border-2 rounded-2xl border-black/30"
           key={link.id}
         >
-          <figure className="w-15 h-15 rounded-full overflow-hidden p-1 mr-2">
+          <figure className="w-10 h-10 rounded-full overflow-hidden p-1 mr-2">
             <img
               className="w-full h-full object-contain"
               src={link.logo}
@@ -104,7 +104,7 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
               >
                 {copyStatus?.status ? (
                   link.id == copyStatus.linkId ? (
-                    "L"
+                    <MdDownloadDone />
                   ) : (
                     <TbCopy></TbCopy>
                   )
@@ -113,7 +113,7 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
                 )}
               </Button>
             </div>
-            <span className="text-slate-500">{link.url}</span>
+            <span className="text-slate-500 w-45 truncate overflow-hidden whitespace-nowrap text-start">{link.url}</span>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger>

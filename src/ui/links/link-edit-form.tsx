@@ -50,7 +50,6 @@ function LinkEditForm({ link }: { link: LinkDataBD }) {
       updateTagsIds: updateTagsIds,
       guestId: guestId,
     };
-    console.log(updateData.updateTagsIds);
 
     try {
       const rest = await updateLinkWithTags(updateData);
@@ -58,7 +57,6 @@ function LinkEditForm({ link }: { link: LinkDataBD }) {
         const res = await getAllLinks(guestId);
         saveLinks(res);
       }
-      console.log(rest);
     } catch (error) {
       console.log(error);
     }
@@ -70,12 +68,12 @@ function LinkEditForm({ link }: { link: LinkDataBD }) {
       className="flex flex-col max-w-4xl mx-auto border-2 border-black/30 rounded-lg p-4 gap-4"
     >
       <div className="flex flex-col gap-2">
-        <Label htmlFor="title">Title</Label>
+        <Label className="text-xl" htmlFor="title">Title</Label>
         <Input name="title" type="text" defaultValue={link.title}></Input>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="tags">Tags</Label>
-        <div className="flex gap-2">
+        <Label className="text-xl" htmlFor="tags">Tags</Label>
+        <div className="flex flex-col sm:flex-row gap-2">
           <SelectTags
             tags={tags}
             addTag={addTag}
@@ -84,7 +82,7 @@ function LinkEditForm({ link }: { link: LinkDataBD }) {
         </div>
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="comment">Comment</Label>
+        <Label className="text-xl" htmlFor="comment">Comment</Label>
         <Textarea name="comment" defaultValue={link.comment}></Textarea>
       </div>
       <div className="flex justify-end gap-3">
