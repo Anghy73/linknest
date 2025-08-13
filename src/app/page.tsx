@@ -118,7 +118,7 @@ export default function Home() {
             Preguntas frecuentes
           </h3>
           <p className="text-center opacity-75 mb-10 mt-2">
-            Todo lo que necesitas saber a cerca de Link Nest.
+            Todo lo que necesitas saber acerca de Link Nest.
           </p>
           <Questions></Questions>
         </section>
