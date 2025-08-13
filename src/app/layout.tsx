@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Link Nest - Organiza, guarda y acorta tus enlaces',
   description:
     'Link Nest es tu espacio para guardar, organizar y acortar enlaces con facilidad. Clasifica tus links en categorías personalizadas y accede a ellos desde cualquier lugar.',
@@ -37,7 +37,7 @@ export const metadata = {
     siteName: 'Link Nest',
     images: [
       {
-        url: 'https://linknest.com/og-image.png', // imagen para compartir
+        url: 'https://linknest.com/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Vista previa de Link Nest'
@@ -47,7 +47,6 @@ export const metadata = {
     type: 'website'
   },
   metadataBase: new URL('https://linknesti.vercel.app/'),
-  themeColor: '#0f172a',
   alternates: {
     canonical: 'https://linknesti.vercel.app/'
   }
