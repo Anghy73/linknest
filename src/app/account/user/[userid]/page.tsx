@@ -24,9 +24,6 @@ export default function Page() {
 
   const [layoutSelect, setLayoutSelect] = useState<LayoutI>("simple");
 
-  console.log(links);
-  
-
   return (
     <div className="flex flex-col gap-10 items-center min-h-screen mt-40 pb-30 px-2">
       <div className="w-full flex justify-center items-center">

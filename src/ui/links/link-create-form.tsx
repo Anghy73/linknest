@@ -85,6 +85,8 @@ function LinkCreateForm() {
     setShortUrl("");
     const regex = new RegExp("^https://[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(/.*)?$");
     const url = e.currentTarget.value;
+    console.log(url);
+    
     if (!guestId) return;
     const links = await getAllLinks(guestId);
     const urls = links.map((link) => link.url);
