@@ -57,10 +57,6 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
     );
   }
 
-  console.log(links);
-  // const tagsLink = links.map((link) => link.linkTags);
-  const tagsLink = links.map((link) => link.linkTags);
-
   return (
     <>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6 justify-items-center">

@@ -126,11 +126,12 @@ function LinkCreateForm() {
     const linkTagsIds = tags.map((tag) => tag.id);
 
     // aqui tomaria todos los datos y crearia los links como en la función action
+    const imgUrl = urlData?.image?.url == null ? '' : urlData?.image.url
     const rawDataWithTags = {
       title: urlData?.title,
       description: urlData?.description,
       logo: urlData?.logo.url,
-      img: urlData?.image.url,
+      img: imgUrl,
       url: urlData?.url,
       shortUrl: shortUrl,
       comment: formData.get("comment"),

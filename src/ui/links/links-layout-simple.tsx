@@ -94,7 +94,7 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
                 href={link.url}
                 target="_blank"
               >
-                {link.title}
+                {link.title == '403 Forbidden' ? link.url : link.title}
               </a>
               <Button
                 onClick={() => handleCopy(link.id, link.shortUrl)}
