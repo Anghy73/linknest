@@ -19,7 +19,6 @@ import { LinkDataBD } from "../../../types/link-data-type";
 import { deleteLinkWithTags, getAllLinks } from "@/lib/actions";
 import useLinksStore from "@/lib/store";
 import { useEffect, useState } from "react";
-import LinkEditForm from "./link-edit-form";
 import Link from "next/link";
 
 function LayoutSimple({ links }: { links: LinkDataBD[] }) {
@@ -36,9 +35,9 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
     saveLinks(linksFresh);
   };
 
-  const handleCopy = async (linkId: number, text: string) => {
+  const handleCopy = async (linkId: number, shortUrl: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(`https://linknesti.vercel.app/shortlink/${shortUrl}`);
       setCopyStatus({
         status: true,
         linkId: linkId,
@@ -98,7 +97,7 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
                 {link.title}
               </a>
               <Button
-                onClick={() => handleCopy(link.id, link.url)}
+                onClick={() => handleCopy(link.id, link.shortUrl)}
                 variant={"ghost"}
                 className="cursor-pointer"
               >
@@ -142,7 +141,7 @@ function LayoutSimple({ links }: { links: LinkDataBD[] }) {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <span
-                  onClick={() => handleCopy(link.id, link.url)}
+                  onClick={() => handleCopy(link.id, link.shortUrl)}
                   className={`${buttonVariants({
                     variant: "ghost",
                   })} cursor-pointer w-full flex justify-start`}

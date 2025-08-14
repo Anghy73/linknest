@@ -33,9 +33,9 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
     saveLinks(linksFresh);
   };
 
-  const handleCopy = async (linkId: number, text: string) => {
+  const handleCopy = async (linkId: number, shortUrl: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(`https://linknesti.vercel.app/shortlink/${shortUrl}`);
       setCopyStatus({
         status: true,
         linkId: linkId,
@@ -127,7 +127,7 @@ function LayoutInfo({ links }: { links: LinkDataBD[] }) {
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <span
-                              onClick={() => handleCopy(link.id, link.url)}
+                              onClick={() => handleCopy(link.id, link.shortUrl)}
                               className={`${buttonVariants({
                                 variant: "ghost",
                               })} cursor-pointer w-full flex justify-start`}
